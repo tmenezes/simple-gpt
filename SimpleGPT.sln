@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleGPT.App", "SimpleGPT.App\SimpleGPT.App.csproj", "{E1DAEADF-EBF3-4B25-BE50-53C50CAD3B5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\SimpleGPT.App", "src\SimpleGPT.App\SimpleGPT.App.csproj", "{E1DAEADF-EBF3-4B25-BE50-53C50CAD3B5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleGPT.Core", "SimpleGPT.Core\SimpleGPT.Core.csproj", "{39AE76B2-2A21-4BE0-9629-7B18353E2481}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "src\SimpleGPT.Core", "src\SimpleGPT.Core\SimpleGPT.Core.csproj", "{39AE76B2-2A21-4BE0-9629-7B18353E2481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGPT.Core.Tests", "SimpleGPT.Core.Tests\SimpleGPT.Core.Tests.csproj", "{F39FB70E-1ADB-4D11-9C3E-2D2DC44792B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests\SimpleGPT.Core.Tests", "tests\SimpleGPT.Core.Tests\SimpleGPT.Core.Tests.csproj", "{F39FB70E-1ADB-4D11-9C3E-2D2DC44792B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
