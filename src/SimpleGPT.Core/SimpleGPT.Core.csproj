@@ -4,13 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<AssemblyVersion>1.0.1</AssemblyVersion>
+	<Version>$(AssemblyVersion)</Version>
     <Title>SimpleGPT.Core</Title>
     <Authors>tmenezes</Authors>
     <PackageProjectUrl>https://github.com/tmenezes/simple-gpt</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/tmenezes/simple-gpt</RepositoryUrl>
     <PackageTags>chatgpt; gpt; llm; openai</PackageTags>
-    <Description>Simplistic library for problem/context evaluation using OpenAI's GPT LLM</Description>
+    <Description>Simplistic library for adding ChatGPT in your application for problem solving and context evaluation/recommendation.</Description>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 

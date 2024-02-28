@@ -1,5 +1,5 @@
 # SimpleGPT.Core
-Simplistic library for problem/context evaluation using OpenAI's GPT LLM
+Simplistic library for adding ChatGPT in your application for problem solving and context evaluation/recommendation. Uses OpenAI's GPT APIs
 
 ## Usage
 ```csharp
