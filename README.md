@@ -6,7 +6,7 @@ Simplistic library for adding ChatGPT in your application for problem solving an
 using SimpleGPT.Core;
 // ...
 const string GPT_API_KEY = "< api-key-here >";
-var gptClient = new GptClient(GPT_API_KEY);
+var gptClient = new GptClientFactory().Create(GPT_API_KEY);
 
 var knowledgeBase = "<the specific knowledge base for your problem>";
 var context = "<current context or state of the scenario you want to make question onto>";
