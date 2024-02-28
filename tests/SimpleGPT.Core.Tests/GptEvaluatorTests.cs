@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using SimpleGPT.Core.Clients;
 
 namespace SimpleGPT.Core.Tests
 {

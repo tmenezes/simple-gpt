@@ -1,30 +1,26 @@
-﻿using System.Drawing;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
-namespace SimpleGPT.Core
+namespace SimpleGPT.Core.Clients
 {
-    public interface IGptClient
-    {
-        string Conversation { get; }
-        Task<string> CallGpt(string userInput);
-    }
-
-    public class GptClient : IGptClient
+    public class GptCompletionsClient : IGptClient, IGptCompletionsClient
     {
         private readonly HttpClient    _client = new();
+        private readonly string        _modeName;
         private readonly StringBuilder _conversation;
 
         public string Conversation => _conversation.ToString();
 
-        public GptClient(string apiKey)
+
+        public GptCompletionsClient(string apiKey) : this(Constants.ModelNames.Gpt3TurboInstruct, apiKey) { }
+        public GptCompletionsClient(string modeName, string apiKey)
         {
             var openAiUrl = $"{Constants.OpenAiBaseUrl}/v1/completions";
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
             _client.BaseAddress = new Uri(openAiUrl);
 
-
+            _modeName = modeName;
             _conversation = new StringBuilder();
         }
 
@@ -35,7 +31,7 @@ namespace SimpleGPT.Core
             var request = new HttpRequestMessage(HttpMethod.Post, "");
             request.Content = JsonContent.Create(new
             {
-                model = Constants.ModelNames.Gpt3Turbo,
+                model = _modeName,
                 prompt = _conversation.ToString(),
                 temperature = 0.9,
                 max_tokens = 256,
@@ -56,5 +52,7 @@ namespace SimpleGPT.Core
 
             return gptResponse;
         }
+
+        public Task<string> GetCompletions(string userInput) => CallGpt(userInput);
     }
 }

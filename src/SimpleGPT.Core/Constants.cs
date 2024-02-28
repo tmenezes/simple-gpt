@@ -1,13 +1,16 @@
 ﻿namespace SimpleGPT.Core;
 
-internal static class Constants
+public static class Constants
 {
     internal const string OpenAiBaseUrl = "https://api.openai.com";
 
-    internal static class ModelNames
+    public static class ModelNames
     {
-        internal const string Gpt4 = "gpt-4";
-        internal const string Gpt4Turbo = "gpt-4-0125-preview";
-        internal const string Gpt3Turbo = "gpt-3.5-turbo-instruct";
+        public const string Gpt4 = "gpt-4";
+        public const string Gpt4Turbo = "gpt-4-0125-preview";
+        public const string Gpt3Turbo = "gpt-3.5-turbo";
+        public const string Gpt3Turbo0125 = "gpt-3.5-turbo-0125";
+        public const string Gpt3Turbo1106 = "gpt-3.5-turbo-1106";
+        public const string Gpt3TurboInstruct = "gpt-3.5-turbo-instruct";
     }
 }

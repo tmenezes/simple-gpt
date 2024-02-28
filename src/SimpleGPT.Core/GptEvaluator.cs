@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using SimpleGPT.Core.Clients;
 
 namespace SimpleGPT.Core;
 
