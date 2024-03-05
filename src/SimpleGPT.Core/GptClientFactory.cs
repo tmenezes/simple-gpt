@@ -9,7 +9,7 @@ public interface IGptClientFactory
 
 public class GptClientFactory : IGptClientFactory
 {
-    public IGptClient Create(string apiKey) => Create(Constants.ModelNames.Gpt4Turbo, apiKey);
+    public IGptClient Create(string apiKey) => Create(Shared.ModelNames.Gpt4Turbo, apiKey);
     public IGptClient Create(string modelName, string apiKey)
     {
         var isGpt3Turbo = modelName.StartsWith("gpt-3.5-turbo");

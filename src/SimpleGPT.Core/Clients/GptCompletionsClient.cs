@@ -6,17 +6,17 @@ namespace SimpleGPT.Core.Clients
 {
     public class GptCompletionsClient : IGptClient, IGptCompletionsClient
     {
-        private readonly HttpClient    _client = new();
-        private readonly string        _modeName;
-        private readonly StringBuilder _conversation;
+        private readonly HttpClient     _client = new();
+        private readonly string         _modeName;
+        private readonly StringBuilder  _conversation;
 
         public string Conversation => _conversation.ToString();
 
-
-        public GptCompletionsClient(string apiKey) : this(Constants.ModelNames.Gpt3TurboInstruct, apiKey) { }
+        // constructors
+        public GptCompletionsClient(string apiKey) : this(Shared.ModelNames.Gpt3TurboInstruct, apiKey) { }
         public GptCompletionsClient(string modeName, string apiKey)
         {
-            var openAiUrl = $"{Constants.OpenAiBaseUrl}/v1/completions";
+            var openAiUrl = $"{Shared.OpenAiBaseUrl}/v1/completions";
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
             _client.BaseAddress = new Uri(openAiUrl);
 

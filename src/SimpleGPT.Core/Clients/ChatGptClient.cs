@@ -12,7 +12,7 @@ public class ChatGptClient : IChatGptClient
     public string Conversation => _messages.Select(m => m.ToString()).Aggregate((a, b) => $"{a}\n{b}") ?? "";
 
     // ctor
-    public ChatGptClient(string apiKey) : this(Constants.ModelNames.Gpt4Turbo, apiKey) { }
+    public ChatGptClient(string apiKey) : this(Shared.ModelNames.Gpt4Turbo, apiKey) { }
     public ChatGptClient(string modeName, string apiKey)
     {
         _modeName = modeName;

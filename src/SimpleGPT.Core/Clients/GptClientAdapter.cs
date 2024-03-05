@@ -4,7 +4,7 @@ public class GptClientAdapter : IGptClient
 {
     private readonly ChatGptClient _chatGptClient;
 
-    public GptClientAdapter(string apiKey) : this(Constants.ModelNames.Gpt4Turbo, apiKey) { }
+    public GptClientAdapter(string apiKey) : this(Shared.ModelNames.Gpt4Turbo, apiKey) { }
     public GptClientAdapter(string modelName, string apiKey)
     {
         _chatGptClient = new ChatGptClient(modelName, apiKey);
