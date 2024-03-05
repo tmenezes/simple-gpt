@@ -12,8 +12,8 @@ public class GptClientFactory : IGptClientFactory
     public IGptClient Create(string apiKey) => Create(Shared.ModelNames.Gpt4Turbo, apiKey);
     public IGptClient Create(string modelName, string apiKey)
     {
-        var isGpt3Turbo = modelName.StartsWith("gpt-3.5-turbo");
-        return isGpt3Turbo
+        var isGpt3TurboInstruct = modelName.StartsWith("gpt-3.5-turbo-instruct");
+        return isGpt3TurboInstruct
             ? new GptCompletionsClient(modelName, apiKey)
             : new GptClientAdapter(modelName, apiKey);
     }
