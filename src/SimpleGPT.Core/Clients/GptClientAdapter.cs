@@ -10,9 +10,10 @@ public class GptClientAdapter : IGptClient
         _chatGptClient = new ChatGptClient(modelName, apiKey);
     }
 
-    public Task<string> CallGpt(string userInput)
+    public Task<string> CallGpt(string userInput) => CallGpt(userInput, Shared.GptOptions.DefaultGeneralPurposes);
+    public Task<string> CallGpt(string userInput, GptCallOptions options)
     {
         _chatGptClient.AddChatMessage(ChatMessageType.User, userInput);
-        return _chatGptClient.CallGpt();
+        return _chatGptClient.CallGpt(options);
     }
 }

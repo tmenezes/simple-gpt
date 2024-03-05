@@ -3,12 +3,14 @@
 public interface IGptClient
 {
     Task<string> CallGpt(string userInput);
+    Task<string> CallGpt(string userInput, GptCallOptions options);
 }
 
 public interface IGptCompletionsClient
 {
     string Conversation { get; }
     Task<string> GetCompletions(string userInput);
+    Task<string> GetCompletions(string userInput, GptCallOptions options);
 }
 
 
@@ -24,4 +26,5 @@ public interface IChatGptClient
     string Conversation { get; }
     void AddChatMessage(ChatMessageType type, string message);
     Task<string> CallGpt();
+    Task<string> CallGpt(GptCallOptions options);
 }

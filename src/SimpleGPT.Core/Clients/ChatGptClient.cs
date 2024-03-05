@@ -26,13 +26,14 @@ public class ChatGptClient : IChatGptClient
         _messages.Add(chatMessage);
     }
 
-    public async Task<string> CallGpt()
+    public Task<string> CallGpt() => CallGpt(Shared.GptOptions.DefaultGeneralPurposes);
+    public async Task<string> CallGpt(GptCallOptions options)
     {
         var chatCompletionsOptions = new ChatCompletionsOptions(_modeName, _messages)
         {
-            Temperature = 0.9f,
-            MaxTokens = 256,
-            PresencePenalty = 0.5f
+            Temperature = options.Temperature,
+            MaxTokens = options.MaxTokens,
+            PresencePenalty = options.PresencePenalty
         };
 
         var response = await _client.GetChatCompletionsAsync(chatCompletionsOptions);

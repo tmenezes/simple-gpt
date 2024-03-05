@@ -24,7 +24,8 @@ namespace SimpleGPT.Core.Clients
             _conversation = new StringBuilder();
         }
 
-        public async Task<string> CallGpt(string userInput)
+        public Task<string> CallGpt(string userInput) => CallGpt(userInput, Shared.GptOptions.DefaultGeneralPurposes);
+        public async Task<string> CallGpt(string userInput, GptCallOptions options)
         {
             _conversation.Append(userInput).Append("\n");
 
@@ -33,11 +34,11 @@ namespace SimpleGPT.Core.Clients
             {
                 model = _modeName,
                 prompt = _conversation.ToString(),
-                temperature = 0.9,
-                max_tokens = 256,
-                top_p = 1,
-                frequency_penalty = 0,
-                presence_penalty = 0.5
+                temperature = options.Temperature,
+                max_tokens = options.MaxTokens,
+                top_p = options.Top ?? 1,
+                frequency_penalty = options.FrequencyPenalty,
+                presence_penalty = options.PresencePenalty
             });
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -54,5 +55,6 @@ namespace SimpleGPT.Core.Clients
         }
 
         public Task<string> GetCompletions(string userInput) => CallGpt(userInput);
+        public Task<string> GetCompletions(string userInput, GptCallOptions options) => CallGpt(userInput, options);
     }
 }

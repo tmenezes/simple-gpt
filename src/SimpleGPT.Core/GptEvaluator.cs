@@ -37,6 +37,6 @@ public class GptEvaluator : IGptEvaluator
         sb.Append($"On this context: {_context}.");
         sb.Append($"Evaluate this: {question}");
 
-        return await _gptClient.CallGpt(sb.ToString());
+        return await _gptClient.CallGpt(sb.ToString(), Shared.GptOptions.DefaultForEvaluator);
     }
 }
