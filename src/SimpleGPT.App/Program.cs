@@ -4,11 +4,11 @@ namespace SimpleGPT
 {
     internal class Program
     {
-        private const string GPT_API_KEY = "< api-key-here >";
+        private const string GPT_API_KEY = "<api-key-here>";
 
         static async Task Main(string[] args)
         {
-            var gptClient = new GptClientFactory().Create(Shared.ModelNames.Gpt4Turbo, GPT_API_KEY);
+            var gptClient = new GptClientFactory().Create(Shared.ModelNames.Gpt5_4Mini, GPT_API_KEY);
 
             var knowledgeBase = "The Brazil store has discounts for member users. Guests can become a member and get discounts. Socks are cheaper today. most man are buying shoes lately.";
             var context = "You're talking to a shopper at a Checkout page of the Brazilian sport brand website. The shopper has socks in the cart. shopper is guest user";

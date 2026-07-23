@@ -8,6 +8,16 @@ public static class Shared
 
     public static class ModelNames
     {
+        public const string Gpt5_6Sol = "gpt-5.6-sol";
+        public const string Gpt5_6Terra = "gpt-5.6-terra";
+        public const string Gpt5_6Luna = "gpt-5.6-luna";
+        public const string Gpt5_5 = "gpt-5.5";
+        public const string Gpt5_5Pro = "gpt-5.5-pro";
+        public const string Gpt5_4 = "gpt-5.4";
+        public const string Gpt5_4Mini = "gpt-5.4-mini";
+        public const string Gpt5_4Nano = "gpt-5.4-nano";
+        public const string Gpt5_4Pro = "gpt-5.4-pro";
+
         public const string Gpt4 = "gpt-4";
         public const string Gpt4Turbo = "gpt-4-0125-preview";
         public const string Gpt3Turbo = "gpt-3.5-turbo";

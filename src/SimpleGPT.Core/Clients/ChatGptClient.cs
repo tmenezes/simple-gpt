@@ -1,13 +1,13 @@
-﻿using Azure.AI.OpenAI;
-using System.Text;
+﻿using OpenAI;
+using OpenAI.Chat;
 
 namespace SimpleGPT.Core.Clients;
 
 public class ChatGptClient : IChatGptClient
 {
-    private readonly string                   _modeName;
-    private readonly OpenAIClient             _client;
-    private readonly List<ChatRequestMessage> _messages = new();
+    private readonly OpenAIClient      _client;
+    private readonly ChatClient        _chatClient;
+    private readonly List<ChatMessage> _messages = new();
 
     public string Conversation => _messages.Select(m => m.ToString()).Aggregate((a, b) => $"{a}\n{b}") ?? "";
 
@@ -15,8 +15,8 @@ public class ChatGptClient : IChatGptClient
     public ChatGptClient(string apiKey) : this(Shared.ModelNames.Gpt4Turbo, apiKey) { }
     public ChatGptClient(string modeName, string apiKey)
     {
-        _modeName = modeName;
         _client = new OpenAIClient(apiKey);
+        _chatClient = _client.GetChatClient(modeName);
     }
 
     // public
@@ -29,30 +29,30 @@ public class ChatGptClient : IChatGptClient
     public Task<string> CallGpt() => CallGpt(Shared.GptOptions.DefaultGeneralPurposes);
     public async Task<string> CallGpt(GptCallOptions options)
     {
-        var chatCompletionsOptions = new ChatCompletionsOptions(_modeName, _messages)
+        var chatCompletionsOptions = new ChatCompletionOptions
         {
             Temperature = options.Temperature,
-            MaxTokens = options.MaxTokens,
+            MaxOutputTokenCount = options.MaxTokens,
             PresencePenalty = options.PresencePenalty
         };
 
-        var response = await _client.GetChatCompletionsAsync(chatCompletionsOptions);
-        var responseMessage = response.Value.Choices[0].Message;
+        var response = await _chatClient.CompleteChatAsync(_messages, chatCompletionsOptions);
+        var responseContent = response.Value.Content.First().Text;
 
-        var chatMessage = CreateChatMessage(responseMessage.Role.ToString(), responseMessage.Content);
+        var chatMessage = CreateChatMessage(response.Value.Role.ToString(), responseContent);
         _messages.Add(chatMessage);
 
-        return responseMessage.Content;
+        return responseContent;
     }
 
     // private
-    private ChatRequestMessage CreateChatMessage(string chatMessageType, string message)
+    private ChatMessage CreateChatMessage(string chatMessageType, string message)
     {
-        ChatRequestMessage chatMessage = chatMessageType.ToLowerInvariant() switch
+        ChatMessage chatMessage = chatMessageType.ToLowerInvariant() switch
         {
-            "system" => new ChatRequestSystemMessage(message),
-            "assistant" => new ChatRequestAssistantMessage(message),
-            "user" => new ChatRequestUserMessage(message),
+            "system" => new SystemChatMessage(message),
+            "assistant" => new AssistantChatMessage(message),
+            "user" => new UserChatMessage(message),
             _ => throw new ArgumentOutOfRangeException(nameof(chatMessageType))
         };
         return chatMessage;
