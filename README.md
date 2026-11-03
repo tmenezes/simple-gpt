@@ -34,5 +34,53 @@ var evaluator = new GptEvaluator(gptClient, knowledgeBase, context);
 var result = await evaluator.Evaluate(question);
 ```
 
+## Decisions API
+
+`GptDecisionMaker` evaluates text using OpenAI's [Decisions API](https://developers.openai.com/api/docs/guides/decisions). It uses the `gpt-6-luna` model and sends requests directly to `/v1/decisions`: the official OpenAI .NET client 2.14.0 does not expose a Decisions client. The library remains compatible with .NET 6. Image inputs are not supported.
+
+Supply a reusable `HttpClient`, an API key from a secure source, shared knowledge and context, and a named question. The caller owns the `HttpClient`. An optional constructor overload accepts custom preset instructions before the knowledge and context arguments. Each `Evaluate` call sends one question.
+
+```csharp
+using SimpleGPT.Core;
+
+var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
+	?? throw new InvalidOperationException("Set OPENAI_API_KEY.");
+using var httpClient = new HttpClient();
+var maker = new GptDecisionMaker(httpClient, apiKey,
+	"Returns are handled by billing; delivery issues are handled by shipping.",
+	"The customer says their order arrived damaged.");
+
+var predicate = await maker.Evaluate(new PredicateQuestion(
+	"damaged", "Does the customer report damage?"));
+if (predicate.IsRefused)
+	Console.WriteLine($"Refused: {predicate.Refusal!.Name}");
+else
+	Console.WriteLine($"Damage probability: {predicate.Answer!.Probability}");
+
+var choice = await maker.Evaluate(new ChoiceQuestion(
+	"department", "Which department should handle this?", new[]
+	{
+		new DecisionChoice("billing", "Returns and refunds"),
+		new DecisionChoice("shipping", "Delivery issues")
+	}));
+if (choice.IsRefused)
+	Console.WriteLine($"Refused: {choice.Refusal!.Name}");
+else
+	Console.WriteLine($"Department: {choice.Answer!.Choice.Value}; confidence: {choice.Answer.Confidence}");
+
+var score = await maker.Evaluate(new ScoreQuestion(
+	"severity", "How severe is the issue?", new[]
+	{
+		new DecisionScoreLevel("minor", "The product remains usable"),
+		new DecisionScoreLevel("major", "The product cannot be used")
+	}));
+if (score.IsRefused)
+	Console.WriteLine($"Refused: {score.Refusal!.Name}");
+else
+	Console.WriteLine($"Severity: {score.Answer!.Score}; confidence: {score.Answer.Confidence}");
+```
+
+Predicate answers provide a probability from 0 to 1. Choice answers provide the selected string or Boolean value, confidence, and a probability for each choice. Score answers provide confidence and per-level probabilities; the score is the probability-weighted average of the zero-based level indices and can fall between levels. Use application-specific thresholds when interpreting results. A refusal has no answer and is available through `Refusal`.
+
 ## Sample
 ![Sample](res/simple-gpt-sample.jpg)
