@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace SimpleGPT.Core.Clients
@@ -46,7 +47,8 @@ namespace SimpleGPT.Core.Clients
             // Get the response from the API
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseJson = JObject.Parse(responseContent);
-            var gptResponse = responseJson["choices"][0]["text"].ToString();
+            var gptResponse = responseJson["choices"]?[0]?["text"]?.ToString()
+                ?? throw new JsonException("The completions response must contain choice text.");
 
             // update conversation state
             _conversation.Append(gptResponse).Append("\n\n");
