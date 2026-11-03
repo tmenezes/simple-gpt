@@ -19,27 +19,27 @@ namespace SimpleGPT.Core.Tests
             _expectedResult = "gpt eval result";
 
             _gptClientMock = Substitute.For<IGptClient>();
-            _gptClientMock.CallGpt(Arg.Any<string>()).Returns(_expectedResult);
+            _gptClientMock.CallGpt(Arg.Any<string>(), Arg.Any<GptCallOptions>()).Returns(_expectedResult);
 
             _gptEvaluator = new GptEvaluator(_gptClientMock, "", "");
         }
 
         [Fact]
-        public async void WhenEvaluate_ShouldUseProperQuestion()
+        public async Task WhenEvaluate_ShouldUseProperQuestion()
         {
             // act
             var result = await _gptEvaluator.Evaluate(_question);
 
             // assert
             result.Should().Be(_expectedResult);
-            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(_question)));
+            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(_question)), Arg.Any<GptCallOptions>());
         }
 
         [Theory]
         [InlineData("my-instruct", "", "")]
         [InlineData("my-instruct", "my-knowledge", "")]
         [InlineData("my-instruct", "my-knowledge", "my-context")]
-        public async void WhenEvaluate_GivenCertainCtorParams_ShouldUseProperValues(string instruction, string knowledge, string context)
+        public async Task WhenEvaluate_GivenCertainCtorParams_ShouldUseProperValues(string instruction, string knowledge, string context)
         {
             // arrange
             _gptEvaluator = new GptEvaluator(_gptClientMock, instruction, knowledge, context);
@@ -49,9 +49,9 @@ namespace SimpleGPT.Core.Tests
 
             // assert
             result.Should().Be(_expectedResult);
-            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(instruction)));
-            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(knowledge)));
-            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(context)));
+            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(instruction)), Arg.Any<GptCallOptions>());
+            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(knowledge)), Arg.Any<GptCallOptions>());
+            await _gptClientMock.Received().CallGpt(Arg.Is<string>(a => a.Contains(context)), Arg.Any<GptCallOptions>());
         }
     }
 }

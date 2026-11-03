@@ -13,7 +13,7 @@ public class GptDecisionMakerTests
     {
         var handler = new StubHandler("{\"answers\":[{\"type\":\"predicate\",\"name\":\"damaged\",\"probability\":0.92}]}");
         using var client = new HttpClient(handler);
-        var maker = new GptDecisionMaker(client, "test-key", "custom instructions", "knowledge", "context");
+        var maker = new GptDecisionMaker(client, "test-key", Shared.ModelNames.Gpt6Luna, "custom instructions", "knowledge", "context");
 
         var result = await maker.Evaluate(new PredicateQuestion("damaged", "Is it damaged?"));
 
@@ -191,6 +191,7 @@ public class GptDecisionMakerTests
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             Method = request.Method;
             Uri = request.RequestUri;
             Authorization = request.Headers.Authorization?.ToString();
