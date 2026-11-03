@@ -35,8 +35,7 @@ public sealed class GptDecisionMaker : IGptDecisionMaker
     private readonly HttpClient _httpClient;
     private readonly string     _apiKey;
     private readonly string     _input;
-
-    private JToken _model = Shared.ModelNames.Gpt6Luna;
+    private readonly JToken     _model;
 
     /// <summary>Initializes a decision maker with default instructions.</summary>
     /// <param name="httpClient">The HTTP client used to send requests; ownership remains with the caller.</param>
@@ -44,7 +43,7 @@ public sealed class GptDecisionMaker : IGptDecisionMaker
     /// <param name="knowledgeBase">The shared knowledge used to evaluate questions.</param>
     /// <param name="context">The shared context used to evaluate questions.</param>
     public GptDecisionMaker(HttpClient httpClient, string apiKey, string knowledgeBase, string context)
-        : this(httpClient, apiKey, DefaultInstructions, knowledgeBase, context) { }
+        : this(httpClient, apiKey, Shared.ModelNames.Gpt6Luna, knowledgeBase, context) { }
 
     /// <summary>Initializes a decision maker with default instructions.</summary>
     /// <param name="httpClient">The HTTP client used to send requests; ownership remains with the caller.</param>
