@@ -23,7 +23,7 @@ This client has a built-in "framework" of a problem solving using ChatGPT APIs. 
 ```csharp
 using SimpleGPT.Core;
 
-const string GPT_API_KEY = "< api-key-here >";
+const string GPT_API_KEY = "<api-key-here>";
 var gptClient = new GptClientFactory().Create(GPT_API_KEY);
 
 var knowledgeBase = "<the specific knowledge base for your problem>";
@@ -43,44 +43,33 @@ Supply a reusable `HttpClient`, an API key from a secure source, shared knowledg
 ```csharp
 using SimpleGPT.Core;
 
-var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
-	?? throw new InvalidOperationException("Set OPENAI_API_KEY.");
+var apiKey = "<api-key-here>";
 using var httpClient = new HttpClient();
 var maker = new GptDecisionMaker(httpClient, apiKey,
-	"Returns are handled by billing; delivery issues are handled by shipping.",
-	"The customer says their order arrived damaged.");
+    "Returns are handled by billing; delivery issues are handled by shipping.",
+    "The customer says their order arrived damaged."
+);
 
-var predicate = await maker.Evaluate(new PredicateQuestion(
-	"damaged", "Does the customer report damage?"));
-if (predicate.IsRefused)
-	Console.WriteLine($"Refused: {predicate.Refusal!.Name}");
-else
-	Console.WriteLine($"Damage probability: {predicate.Answer!.Probability}");
+var choice = await maker.Evaluate(new ChoiceQuestion("department", "Which department should handle this?", new[]
+{
+    new DecisionChoice("billing", "Returns and refunds"),
+    new DecisionChoice("shipping", "Delivery issues")
+}));
 
-var choice = await maker.Evaluate(new ChoiceQuestion(
-	"department", "Which department should handle this?", new[]
-	{
-		new DecisionChoice("billing", "Returns and refunds"),
-		new DecisionChoice("shipping", "Delivery issues")
-	}));
-if (choice.IsRefused)
-	Console.WriteLine($"Refused: {choice.Refusal!.Name}");
-else
-	Console.WriteLine($"Department: {choice.Answer!.Choice.Value}; confidence: {choice.Answer.Confidence}");
-
-var score = await maker.Evaluate(new ScoreQuestion(
-	"severity", "How severe is the issue?", new[]
-	{
-		new DecisionScoreLevel("minor", "The product remains usable"),
-		new DecisionScoreLevel("major", "The product cannot be used")
-	}));
-if (score.IsRefused)
-	Console.WriteLine($"Refused: {score.Refusal!.Name}");
-else
-	Console.WriteLine($"Severity: {score.Answer!.Score}; confidence: {score.Answer.Confidence}");
+if (!choice.IsRefused)
+{
+    Console.WriteLine($"Department: {choice.Answer!.Choice.Value}; confidence: {choice.Answer.Confidence}");
+}
 ```
 
-Predicate answers provide a probability from 0 to 1. Choice answers provide the selected string or Boolean value, confidence, and a probability for each choice. Score answers provide confidence and per-level probabilities; the score is the probability-weighted average of the zero-based level indices and can fall between levels. Use application-specific thresholds when interpreting results. A refusal has no answer and is available through `Refusal`.
+---
+Note that:
+- Predicate answers provide a probability from 0 to 1. 
+- Choice answers provide the selected string or Boolean value, confidence, and a probability for each choice. 
+- Score answers provide confidence and per-level probabilities; the score is the probability-weighted average of the zero-based level indices and can fall between levels. 
+
+Use application-specific thresholds when interpreting results. 
+A refusal has no answer and is available through `Refusal`.
 
 ## Sample
 ![Sample](res/simple-gpt-sample.jpg)
